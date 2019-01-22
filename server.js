@@ -39,12 +39,12 @@ app.post("/api/shorturl/new", function (req, res) {
   const url  = req.body.url;
   const host = url.replace(/^https?:\/\//, '');
   
-  const format = RegExp('^https?:\/\/.+\..+');
+  const format = /^https?:\/\/.+\..+/;
   
   // Check if URL is valid
   // and follows the http(s)://(www.)example.com(/more/routes) format
   dns.lookup( host, (error, hostname, service) => {
-    if (error | !format.test(url)){ return res.json({"error":"invalid URL"}) }
+    if (error || !format.test(url)){ return res.json({"error":"invalid URL"}) }
    
     // Check if website exists in the database
     Site.findOne({originalURL: url}, function(error, doc) {
